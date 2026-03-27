@@ -1,1 +1,292 @@
 
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+.app{background:#0d0f14;color:#fff;font-family:'Segoe UI',sans-serif;min-height:600px;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.logo{font-size:1.2rem;font-weight:700;color:#d85a30;letter-spacing:-0.5px;}
+.logo span{color:#fff;}
+.nav-links{display:flex;gap:20px;font-size:0.8rem;color:rgba(255,255,255,0.4);}
+.nav-cta{background:#d85a30;color:#fff;border:none;padding:7px 18px;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;}
+.main{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:540px;}
+.map-section{position:relative;background:#111420;overflow:hidden;}
+canvas#mapCanvas{display:block;width:100%;height:100%;}
+.map-overlay-top{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;}
+.map-title{background:rgba(13,15,20,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;}
+.map-title-label{font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-bottom:3px;}
+.map-title-val{font-size:14px;font-weight:600;color:#fff;}
+.live-badge{background:rgba(13,15,20,0.85);border:1px solid rgba(29,158,117,0.4);border-radius:20px;padding:5px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:#1D9E75;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#1D9E75;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.side{background:#0d0f14;border-left:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;}
+.side-header{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.side-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:10px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.stat-card{background:#161921;border-radius:8px;padding:10px;}
+.stat-label{font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:4px;}
+.stat-val{font-size:18px;font-weight:700;color:#fff;}
+.stat-val.orange{color:#d85a30;}
+.stat-val.green{color:#1D9E75;}
+.stat-val.blue{color:#378ADD;}
+.stat-sub{font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;}
+.fleet-section{flex:1;padding:14px 16px;overflow:hidden;}
+.fleet-title{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-bottom:10px;}
+.drone-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#161921;border-radius:8px;margin-bottom:6px;border:1px solid transparent;transition:border-color 0.3s;}
+.drone-row.active-row{border-color:rgba(216,90,48,0.3);}
+.drone-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.drone-icon svg{width:14px;height:14px;}
+.di-flight{background:rgba(216,90,48,0.15);}
+.di-standby{background:rgba(55,138,221,0.15);}
+.di-charge{background:rgba(186,117,23,0.15);}
+.drone-info{flex:1;}
+.drone-id{font-size:11px;font-weight:600;color:#fff;}
+.drone-route{font-size:10px;color:rgba(255,255,255,0.35);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.drone-right{text-align:right;}
+.drone-status{font-size:9px;padding:2px 7px;border-radius:10px;margin-bottom:3px;display:inline-block;}
+.ds-flight{background:rgba(29,158,117,0.2);color:#1D9E75;}
+.ds-standby{background:rgba(55,138,221,0.2);color:#378ADD;}
+.ds-charge{background:rgba(186,117,23,0.2);color:#EF9F27;}
+.batt-wrap{width:36px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-left:auto;}
+.batt-fill{height:4px;border-radius:2px;transition:width 1s;}
+.orders-section{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.07);}
+.order-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.order-row:last-child{border:none;}
+.order-left{display:flex;align-items:center;gap:8px;}
+.order-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.od-active{background:#d85a30;}
+.od-done{background:#1D9E75;}
+.od-pending{background:#378ADD;}
+.order-id{font-size:11px;color:#fff;}
+.order-cargo{font-size:10px;color:rgba(255,255,255,0.35);}
+.order-price{font-size:11px;font-weight:600;color:#d85a30;}
+.bottom-bar{padding:12px 24px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;}
+.ticker{font-size:11px;color:rgba(255,255,255,0.3);}
+.ticker span{color:#d85a30;}
+.bottom-btns{display:flex;gap:8px;}
+.bbtn{padding:7px 16px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:none;}
+.bbtn-outline{background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.15);}
+.bbtn-primary{background:#d85a30;color:#fff;}
+</style>
+
+<div class="app">
+<nav>
+  <div class="logo">Mangu <span>Delivery</span></div>
+  <div class="nav-links">
+    <span>How it works</span><span>Nests</span><span>Merchants</span>
+  </div>
+  <button class="nav-cta">Order now</button>
+</nav>
+
+<div class="main">
+  <div class="map-section">
+    <canvas id="mapCanvas"></canvas>
+    <div class="map-overlay-top">
+      <div class="map-title">
+        <div class="map-title-label">LIVE FLEET MAP</div>
+        <div class="map-title-val">Kampala, Uganda</div>
+      </div>
+      <div class="live-badge"><div class="live-dot"></div>Live simulation</div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="side-header">
+      <div class="side-title">Today's overview</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Deliveries</div><div class="stat-val orange" id="sDeliveries">0</div><div class="stat-sub">today</div></div>
+        <div class="stat-card"><div class="stat-label">In flight</div><div class="stat-val green" id="sInFlight">0</div><div class="stat-sub">drones active</div></div>
+        <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-val blue" id="sRevenue">0K</div><div class="stat-sub">UGX today</div></div>
+        <div class="stat-card"><div class="stat-label">Avg time</div><div class="stat-val" id="sAvgTime">0m</div><div class="stat-sub">per delivery</div></div>
+      </div>
+    </div>
+
+    <div class="fleet-section">
+      <div class="fleet-title">FLEET STATUS</div>
+      <div id="fleetList"></div>
+    </div>
+
+    <div class="orders-section">
+      <div class="fleet-title">RECENT ORDERS</div>
+      <div id="orderList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <div class="ticker">Mangu Nest network: <span>Shell Nakawa</span> · <span>Total Lugogo</span> · <span>Kingdom Kampala</span> · <span>Kisementi</span> · <span>Kololo</span></div>
+  <div class="bottom-btns">
+    <button class="bbtn bbtn-outline">View pitch deck</button>
+    <button class="bbtn bbtn-primary">Request early access</button>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+const canvas = document.getElementById('mapCanvas');
+const ctx = canvas.getContext('2d');
+
+const nests = [
+  {name:'Shell Nakawa', x:0.72, y:0.28, color:'#d85a30'},
+  {name:'Total Lugogo', x:0.55, y:0.22, color:'#d85a30'},
+  {name:'Kingdom Kampala', x:0.28, y:0.62, color:'#d85a30'},
+  {name:'Kisementi', x:0.38, y:0.32, color:'#d85a30'},
+  {name:'Kololo', x:0.22, y:0.38, color:'#d85a30'},
+  {name:'Ntinda', x:0.78, y:0.45, color:'#d85a30'},
+];
+
+const droneData = [
+  {id:'MG-01', from:0, to:2, batt:82, progress:0, speed:0.003, color:'#d85a30'},
+  {id:'MG-02', from:1, to:3, batt:74, progress:0.4, speed:0.0025, color:'#1D9E75'},
+  {id:'MG-03', from:3, to:5, batt:91, progress:0.2, speed:0.004, color:'#378ADD'},
+  {id:'MG-04', from:4, to:1, batt:61, progress:0.7, speed:0.002, color:'#EF9F27'},
+  {id:'MG-05', from:2, to:0, batt:88, progress:0.55, speed:0.003, color:'#d85a30'},
+];
+
+const orders = [
+  {id:'#MG-041', cargo:'Legal document', price:'20K', status:'active'},
+  {id:'#MG-040', cargo:'Medication', price:'18K', status:'done'},
+  {id:'#MG-039', cargo:'Bank documents', price:'20K', status:'done'},
+  {id:'#MG-038', cargo:'Legal document', price:'20K', status:'pending'},
+];
+
+let deliveryCount = 23;
+let revenue = 460;
+let frameCount = 0;
+
+function resize(){
+  const parent = canvas.parentElement;
+  canvas.width = parent.clientWidth;
+  canvas.height = parent.clientHeight || 500;
+}
+
+function drawMap(){
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle = '#111420';
+  ctx.fillRect(0,0,W,H);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  const roads = [[0,3,2],[1,3,4],[3,5,2],[0,4,1],[2,4,3]];
+  roads.forEach(([a,b])=>{
+    const n1=nests[a], n2=nests[b];
+    ctx.strokeStyle='rgba(255,255,255,0.06)';
+    ctx.lineWidth=6;
+    ctx.beginPath();
+    ctx.moveTo(n1.x*W, n1.y*H);
+    ctx.lineTo(n2.x*W, n2.y*H);
+    ctx.stroke();
+  });
+
+  droneData.forEach(d=>{
+    const n1=nests[d.from], n2=nests[d.to];
+    const x1=n1.x*W, y1=n1.y*H, x2=n2.x*W, y2=n2.y*H;
+    const t=d.progress;
+    const cx=(x1+x2)/2, cy=(y1+y2)/2 - 30;
+    ctx.strokeStyle=d.color+'33';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    ctx.moveTo(x1,y1);
+    ctx.quadraticCurveTo(cx,cy,x2,y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    const bx = (1-t)*(1-t)*x1 + 2*(1-t)*t*cx + t*t*x2;
+    const by = (1-t)*(1-t)*y1 + 2*(1-t)*t*cy + t*t*y2;
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    ctx.arc(bx, by, 6, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(bx, by, 3, 0, Math.PI*2);
+    ctx.fill();
+  });
+
+  nests.forEach((n,i)=>{
+    const x=n.x*W, y=n.y*H;
+    ctx.strokeStyle='rgba(216,90,48,0.5)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.arc(x,y,14,0,Math.PI*2);
+    ctx.stroke();
+    ctx.fillStyle='rgba(216,90,48,0.15)';
+    ctx.beginPath();
+    ctx.arc(x,y,14,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#d85a30';
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.font='bold 9px Segoe UI';
+    ctx.textAlign='center';
+    ctx.fillText(n.name, x, y+26);
+  });
+}
+
+function updateDrones(){
+  droneData.forEach(d=>{
+    d.progress += d.speed;
+    if(d.progress >= 1){
+      d.progress = 0;
+      const oldFrom = d.from;
+      d.from = d.to;
+      d.to = Math.floor(Math.random()*nests.length);
+      if(d.to===d.from) d.to=(d.from+1)%nests.length;
+      deliveryCount++;
+      revenue += 20;
+    }
+    d.batt = Math.max(20, d.batt - 0.01);
+  });
+}
+
+function updateUI(){
+  document.getElementById('sDeliveries').textContent = deliveryCount;
+  document.getElementById('sInFlight').textContent = droneData.filter(d=>d.progress>0&&d.progress<1).length;
+  document.getElementById('sRevenue').textContent = Math.round(revenue)+'K';
+  document.getElementById('sAvgTime').textContent = '7.8m';
+
+  const fl = document.getElementById('fleetList');
+  fl.innerHTML = droneData.map(d=>{
+    const from=nests[d.from].name.split(' ')[0];
+    const to=nests[d.to].name.split(' ')[0];
+    const batt=Math.round(d.batt);
+    const battColor=batt>60?'#1D9E75':batt>30?'#EF9F27':'#E24B4A';
+    return `<div class="drone-row active-row">
+      <div class="drone-icon di-flight"><svg viewBox="0 0 24 24" fill="none" stroke="${d.color}" stroke-width="2"><path d="M12 2L8 8H4l4 4-2 6 6-3 6 3-2-6 4-4h-4z"/></svg></div>
+      <div class="drone-info"><div class="drone-id">${d.id}</div><div class="drone-route">${from} → ${to}</div></div>
+      <div class="drone-right"><div class="drone-status ds-flight">In flight</div><div class="batt-wrap"><div class="batt-fill" style="width:${batt}%;background:${battColor};"></div></div></div>
+    </div>`;
+  }).join('');
+
+  const ol = document.getElementById('orderList');
+  ol.innerHTML = orders.map(o=>{
+    const dotClass = o.status==='active'?'od-active':o.status==='done'?'od-done':'od-pending';
+    return `<div class="order-row">
+      <div class="order-left"><div class="order-dot ${dotClass}"></div><div><div class="order-id">${o.id}</div><div class="order-cargo">${o.cargo}</div></div></div>
+      <div class="order-price">${o.price} UGX</div>
+    </div>`;
+  }).join('');
+}
+
+function loop(){
+  frameCount++;
+  updateDrones();
+  drawMap();
+  if(frameCount%30===0) updateUI();
+  requestAnimationFrame(loop);
+}
+
+resize();
+updateUI();
+loop();
+window.addEventListener('resize', ()=>{ resize(); });
+})();
+</script>
