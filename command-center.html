@@ -1,1 +1,236 @@
 
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+:root{--bg:#050914;--panel:rgba(10,18,38,0.85);--cyan:#00f3ff;--cdim:rgba(0,243,255,0.15);--red:#ff3366;--green:#33ff99;--amber:#ffaa00;--grid:rgba(0,243,255,0.04);}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Share Tech Mono',monospace;}
+.cc{background:var(--bg);color:var(--cyan);min-height:620px;overflow:hidden;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:30px 30px;padding:16px;display:flex;flex-direction:column;gap:14px;position:relative;}
+.cc::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,0.15) 50%);background-size:100% 4px;pointer-events:none;z-index:1;}
+header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--cyan);padding-bottom:10px;text-transform:uppercase;position:relative;z-index:2;}
+.sys-title{font-size:18px;letter-spacing:4px;text-shadow:0 0 10px var(--cyan);}
+.header-right{display:flex;align-items:center;gap:20px;font-size:11px;}
+.clock{color:var(--cyan);letter-spacing:2px;font-size:13px;}
+.status{display:flex;align-items:center;gap:8px;font-size:11px;}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s infinite;}
+.sdot.warn{background:var(--amber);box-shadow:0 0 8px var(--amber);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.grid{display:grid;grid-template-columns:240px 1fr 240px;gap:14px;flex:1;position:relative;z-index:2;}
+.panel{background:var(--panel);border:1px solid var(--cdim);border-top:2px solid var(--cyan);padding:14px;overflow:hidden;backdrop-filter:blur(4px);}
+.ptitle{font-size:10px;color:rgba(0,243,255,0.4);margin-bottom:12px;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--cdim);padding-bottom:6px;}
+.trow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--cdim);font-size:11px;align-items:center;}
+.trow:last-child{border:none;}
+.trow.alert{color:var(--red);text-shadow:0 0 5px var(--red);}
+.trow.warn{color:var(--amber);text-shadow:0 0 4px var(--amber);}
+.trow.ok{color:var(--green);}
+.badge{font-size:9px;padding:2px 7px;border-radius:2px;}
+.badge-ok{background:rgba(51,255,153,0.12);color:var(--green);border:1px solid rgba(51,255,153,0.3);}
+.badge-warn{background:rgba(255,170,0,0.12);color:var(--amber);border:1px solid rgba(255,170,0,0.3);}
+.badge-alert{background:rgba(255,51,102,0.12);color:var(--red);border:1px solid rgba(255,51,102,0.3);}
+.badge-dock{background:rgba(0,243,255,0.1);color:var(--cyan);border:1px solid var(--cdim);}
+.center-panel{display:flex;flex-direction:column;gap:10px;}
+.radar-wrap{flex:1;display:flex;align-items:center;justify-content:center;position:relative;}
+.radar{width:280px;height:280px;border-radius:50%;border:1px solid rgba(0,243,255,0.4);position:relative;background:repeating-radial-gradient(transparent,transparent 35px,rgba(0,243,255,0.06) 36px);box-shadow:0 0 20px rgba(0,243,255,0.1);}
+.radar::before{content:"";position:absolute;top:50%;left:50%;width:50%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan));transform-origin:0 50%;animation:scan 4s linear infinite;}
+.radar::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+@keyframes scan{100%{transform:rotate(360deg);}}
+.crosshair-h{position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,243,255,0.15);}
+.crosshair-v{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(0,243,255,0.15);}
+.blip{position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%);}
+.blip::after{content:attr(data-id);position:absolute;top:10px;left:8px;font-size:9px;white-space:nowrap;}
+.blip-ok{background:var(--green);box-shadow:0 0 8px var(--green);color:var(--green);}
+.blip-warn{background:var(--amber);box-shadow:0 0 8px var(--amber);color:var(--amber);}
+.blip-alert{background:var(--red);box-shadow:0 0 8px var(--red);color:var(--red);}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.scard{background:rgba(0,243,255,0.04);border:1px solid var(--cdim);padding:8px 10px;text-align:center;}
+.scard-num{font-size:16px;color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
+.scard-lbl{font-size:9px;color:rgba(0,243,255,0.4);margin-top:3px;letter-spacing:1px;}
+.route-item{padding:8px 0;border-bottom:1px solid var(--cdim);font-size:11px;}
+.route-item:last-child{border:none;}
+.route-main{color:var(--cyan);margin-bottom:3px;}
+.route-meta{font-size:10px;color:rgba(0,243,255,0.4);}
+.log-item{font-size:10px;padding:4px 0;border-bottom:1px solid rgba(0,243,255,0.05);color:rgba(0,243,255,0.6);}
+.log-item span{color:var(--cyan);}
+.log-item.log-warn span{color:var(--amber);}
+.log-item.log-ok span{color:var(--green);}
+.nav-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid var(--cdim);position:relative;z-index:2;}
+.nav-link{font-size:10px;color:rgba(0,243,255,0.4);text-decoration:none;letter-spacing:1px;border:1px solid var(--cdim);padding:5px 12px;cursor:pointer;}
+.nav-link:hover{color:var(--cyan);border-color:var(--cyan);}
+.nav-link.primary{background:rgba(0,243,255,0.08);color:var(--cyan);border-color:var(--cyan);}
+.batt-bar{display:inline-block;width:40px;height:6px;background:rgba(255,255,255,0.1);vertical-align:middle;margin-left:6px;}
+.batt-fill{height:6px;}
+</style>
+
+<div class="cc">
+<header>
+  <div class="sys-title">MANGU // NET.CMD</div>
+  <div class="header-right">
+    <div class="clock" id="clockEl">00:00:00</div>
+    <div class="status"><div class="sdot"></div>SECURE UPLINK · AES-256</div>
+    <div class="status"><div class="sdot warn"></div>MNG-03 WIND WARN</div>
+  </div>
+</header>
+
+<div class="grid">
+
+  <div class="panel">
+    <div class="ptitle">Fleet Telemetry</div>
+    <div class="trow ok">
+      <span>MNG-01 [En Route]</span>
+      <span><span class="badge badge-ok">FLIGHT</span><div class="batt-bar"><div class="batt-fill" style="width:89%;background:var(--green);"></div></div></span>
+    </div>
+    <div class="trow ok">
+      <span>MNG-02 [Lugogo Hub]</span>
+      <span><span class="badge badge-dock">DOCKED</span><div class="batt-bar"><div class="batt-fill" style="width:100%;background:var(--green);"></div></div></span>
+    </div>
+    <div class="trow warn">
+      <span>MNG-03 [Wind Warn]</span>
+      <span><span class="badge badge-warn">CAUTION</span><div class="batt-bar"><div class="batt-fill" style="width:42%;background:var(--amber);"></div></div></span>
+    </div>
+    <div class="trow">
+      <span>MNG-04 [Nakawa Nest]</span>
+      <span><span class="badge badge-dock">STANDBY</span><div class="batt-bar"><div class="batt-fill" style="width:76%;background:var(--cyan);"></div></div></span>
+    </div>
+    <div class="trow ok">
+      <span>MNG-05 [In Flight]</span>
+      <span><span class="badge badge-ok">FLIGHT</span><div class="batt-bar"><div class="batt-fill" style="width:61%;background:var(--green);"></div></div></span>
+    </div>
+
+    <div class="ptitle" style="margin-top:14px;">System Diagnostics</div>
+    <div class="trow"><span>Collision Avoidance</span><span class="badge badge-ok">ONLINE</span></div>
+    <div class="trow"><span>GPS Array</span><span style="font-size:10px;">FIXED · 9 SATS</span></div>
+    <div class="trow"><span>Comms Encrypt</span><span style="font-size:10px;">AES-256</span></div>
+    <div class="trow"><span>Nest Network</span><span class="badge badge-ok">6/6 LIVE</span></div>
+    <div class="trow"><span>AI Pathfinding</span><span class="badge badge-ok">ACTIVE</span></div>
+  </div>
+
+  <div class="panel center-panel">
+    <div class="ptitle">Airspace Overview // Kampala Sector</div>
+    <div class="stats-row">
+      <div class="scard"><div class="scard-num" id="ccDel">26</div><div class="scard-lbl">DELIVERIES</div></div>
+      <div class="scard"><div class="scard-num" id="ccFlight">3</div><div class="scard-lbl">IN FLIGHT</div></div>
+      <div class="scard"><div class="scard-num">8.1m</div><div class="scard-lbl">AVG TIME</div></div>
+      <div class="scard"><div class="scard-num" id="ccRev">520K</div><div class="scard-lbl">UGX TODAY</div></div>
+    </div>
+    <div class="radar-wrap">
+      <div class="radar">
+        <div class="crosshair-h"></div>
+        <div class="crosshair-v"></div>
+        <div class="blip blip-ok" id="b1" data-id="MNG-01" style="top:32%;left:62%;"></div>
+        <div class="blip blip-ok" id="b5" data-id="MNG-05" style="top:58%;left:35%;"></div>
+        <div class="blip blip-warn" id="b3" data-id="MNG-03" style="top:68%;left:45%;"></div>
+      </div>
+    </div>
+    <div class="ptitle">System Log</div>
+    <div class="log-item log-ok"><span>[09:43:12]</span> MNG-01 package collected at Shell Nakawa</div>
+    <div class="log-item"><span>[09:44:01]</span> MNG-04 entering standby at Nakawa Nest</div>
+    <div class="log-item log-warn"><span>[09:44:38]</span> MNG-03 wind speed threshold — rerouting</div>
+    <div class="log-item log-ok"><span>[09:45:22]</span> MNG-05 delivery confirmed at Kingdom Kampala</div>
+    <div class="log-item" id="logLive"><span>[09:45:30]</span> Awaiting next dispatch...</div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">Active Routes</div>
+    <div class="route-item">
+      <div class="route-main">Shell Nakawa → Kingdom Kampala</div>
+      <div class="route-meta">MNG-01 · ETA: <span id="r1eta">03:12</span> · Legal doc</div>
+    </div>
+    <div class="route-item">
+      <div class="route-main">Lugogo → Kisementi</div>
+      <div class="route-meta">MNG-05 · ETA: <span id="r2eta">05:44</span> · Medication</div>
+    </div>
+    <div class="route-item warn" style="color:var(--amber);">
+      <div class="route-main">Kololo → Ntinda [HOLD]</div>
+      <div class="route-meta" style="color:rgba(255,170,0,0.6);">MNG-03 · Wind warning · Standby</div>
+    </div>
+
+    <div class="ptitle" style="margin-top:14px;">Weather Node</div>
+    <div class="trow"><span>Wind Speed</span><span>12 km/h NE</span></div>
+    <div class="trow warn"><span>Gust Peak</span><span style="color:var(--amber);">28 km/h</span></div>
+    <div class="trow"><span>Visibility</span><span>Clear · 10km</span></div>
+    <div class="trow"><span>Precipitation</span><span>0.0 mm</span></div>
+    <div class="trow"><span>Flight Status</span><span class="badge badge-warn">CAUTION</span></div>
+
+    <div class="ptitle" style="margin-top:14px;">Nest Network</div>
+    <div class="trow"><span>Shell Nakawa</span><span class="badge badge-ok">LIVE</span></div>
+    <div class="trow"><span>Total Lugogo</span><span class="badge badge-ok">LIVE</span></div>
+    <div class="trow"><span>Kingdom Kampala</span><span class="badge badge-ok">LIVE</span></div>
+    <div class="trow"><span>Kisementi</span><span class="badge badge-ok">LIVE</span></div>
+    <div class="trow"><span>Kololo Hill</span><span class="badge badge-ok">LIVE</span></div>
+    <div class="trow"><span>Ntinda</span><span class="badge badge-ok">LIVE</span></div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <a class="nav-link" href="index.html">← Back to home</a>
+  <div style="font-size:10px;color:rgba(0,243,255,0.3);letter-spacing:1px;">MANGU DELIVERY · KAMPALA OPS CENTER · CLEARANCE LEVEL 1</div>
+  <a class="nav-link primary" href="admin-dashboard.html">← Admin dashboard</a>
+</div>
+</div>
+
+<script>
+(function(){
+function tick(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('clockEl').textContent=h+':'+m+':'+s;
+}
+tick();
+setInterval(tick,1000);
+
+let del=26,rev=520;
+const blips=[
+  {el:document.getElementById('b1'),x:62,y:32,dx:0.3,dy:0.2},
+  {el:document.getElementById('b5'),x:35,y:58,dx:-0.2,dy:0.3},
+  {el:document.getElementById('b3'),x:45,y:68,dx:0.1,dy:-0.1},
+];
+function moveBlips(){
+  blips.forEach(b=>{
+    b.x+=b.dx;b.y+=b.dy;
+    if(b.x<10||b.x>90)b.dx*=-1;
+    if(b.y<10||b.y>90)b.dy*=-1;
+    b.el.style.left=b.x+'%';
+    b.el.style.top=b.y+'%';
+  });
+}
+
+const etaEls=[document.getElementById('r1eta'),document.getElementById('r2eta')];
+let etaSecs=[192,344];
+function tickEtas(){
+  etaSecs=etaSecs.map((s,i)=>{
+    const ns=Math.max(0,s-1);
+    if(ns===0)etaSecs[i]=300+Math.floor(Math.random()*200);
+    const m=Math.floor(ns/60),sc=ns%60;
+    etaEls[i].textContent=String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
+    return ns;
+  });
+}
+
+const logs=[
+  'MNG-01 package collected at Shell Nakawa',
+  'MNG-02 charging complete — ready for dispatch',
+  'MNG-05 delivery confirmed at Kingdom Kampala',
+  'MNG-04 departing Nakawa Nest',
+  'MNG-03 wind hold lifted — resuming route',
+  'New order received — legal document · Lugogo',
+  'Nest sync complete — all 6 nodes nominal',
+];
+let logIdx=0;
+function updateLog(){
+  del++;rev+=20;
+  document.getElementById('ccDel').textContent=del;
+  document.getElementById('ccRev').textContent=Math.round(rev)+'K';
+  const el=document.getElementById('logLive');
+  const now=new Date();
+  const t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0');
+  el.innerHTML='<span>['+t+']</span> '+logs[logIdx%logs.length];
+  el.className='log-item log-ok';
+  logIdx++;
+}
+
+setInterval(moveBlips,50);
+setInterval(tickEtas,1000);
+setInterval(updateLog,4000);
+})();
+</script>
