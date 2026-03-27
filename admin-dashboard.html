@@ -1,1 +1,373 @@
 
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+.dash{background:#0d0f14;color:#fff;font-family:'Segoe UI',sans-serif;display:grid;grid-template-columns:52px 1fr;min-height:680px;}
+.sidebar{background:#0a0c10;border-right:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;}
+.sb-logo{width:32px;height:32px;background:#d85a30;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;margin-bottom:10px;}
+.sb-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.sb-icon svg{width:16px;height:16px;stroke:rgba(255,255,255,0.25);fill:none;stroke-width:1.5;}
+.sb-icon.active{background:rgba(216,90,48,0.15);}
+.sb-icon.active svg{stroke:#d85a30;}
+.sb-icon:hover svg{stroke:rgba(255,255,255,0.6);}
+.sb-divider{width:24px;height:1px;background:rgba(255,255,255,0.06);margin:6px 0;}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:#378ADD33;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#378ADD;margin-top:auto;}
+.content{display:flex;flex-direction:column;overflow:hidden;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.page-title{font-size:15px;font-weight:600;color:#fff;}
+.page-sub{font-size:11px;color:rgba(255,255,255,0.3);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(29,158,117,0.12);border:1px solid rgba(29,158,117,0.25);border-radius:20px;padding:4px 10px;font-size:10px;color:#1D9E75;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.notif-btn{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,0.05);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.notif-btn svg{width:14px;height:14px;stroke:rgba(255,255,255,0.4);fill:none;stroke-width:1.5;}
+.body{display:grid;grid-template-columns:1fr 300px;flex:1;overflow:hidden;}
+.main-col{padding:16px 16px 16px 20px;display:flex;flex-direction:column;gap:14px;overflow:hidden;}
+.right-col{border-left:1px solid rgba(255,255,255,0.06);padding:16px;display:flex;flex-direction:column;gap:14px;overflow:hidden;}
+.kpi-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.kpi{background:#161921;border-radius:10px;padding:12px 14px;border:1px solid rgba(255,255,255,0.05);}
+.kpi-label{font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:6px;letter-spacing:0.5px;}
+.kpi-val{font-size:22px;font-weight:700;color:#fff;}
+.kpi-val.o{color:#d85a30;}
+.kpi-val.g{color:#1D9E75;}
+.kpi-val.b{color:#378ADD;}
+.kpi-change{font-size:10px;margin-top:4px;}
+.kpi-change.up{color:#1D9E75;}
+.kpi-change.dn{color:#E24B4A;}
+.mid-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;}
+.panel{background:#161921;border-radius:10px;border:1px solid rgba(255,255,255,0.05);overflow:hidden;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.panel-title{font-size:12px;font-weight:600;color:#fff;}
+.panel-badge{font-size:9px;padding:2px 8px;border-radius:10px;}
+.pb-green{background:rgba(29,158,117,0.2);color:#1D9E75;}
+.pb-orange{background:rgba(216,90,48,0.2);color:#d85a30;}
+.map-wrap{position:relative;height:200px;}
+canvas.minimap{width:100%;height:100%;display:block;}
+.orders-table{width:100%;}
+.ot-head{display:grid;grid-template-columns:60px 1fr 70px 60px;gap:8px;padding:8px 14px;font-size:10px;color:rgba(255,255,255,0.3);border-bottom:1px solid rgba(255,255,255,0.06);}
+.ot-row{display:grid;grid-template-columns:60px 1fr 70px 60px;gap:8px;padding:8px 14px;font-size:11px;color:#fff;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center;}
+.ot-row:last-child{border:none;}
+.ot-id{color:rgba(255,255,255,0.5);font-size:10px;}
+.ot-cargo{font-size:11px;}
+.ot-route{font-size:10px;color:rgba(255,255,255,0.35);}
+.st-badge{font-size:9px;padding:2px 7px;border-radius:10px;display:inline-block;}
+.st-transit{background:rgba(216,90,48,0.2);color:#d85a30;}
+.st-done{background:rgba(29,158,117,0.2);color:#1D9E75;}
+.st-pending{background:rgba(55,138,221,0.2);color:#378ADD;}
+.st-cancel{background:rgba(226,75,74,0.2);color:#E24B4A;}
+.price-col{font-size:11px;font-weight:600;color:#d85a30;}
+.drone-list{padding:8px;}
+.dl-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;margin-bottom:4px;background:rgba(255,255,255,0.02);}
+.dl-indicator{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.di-on{background:#1D9E75;}
+.di-ch{background:#EF9F27;}
+.di-st{background:#378ADD;}
+.dl-id{font-size:11px;font-weight:600;color:#fff;width:44px;}
+.dl-info{flex:1;}
+.dl-route{font-size:10px;color:rgba(255,255,255,0.35);}
+.dl-batt-wrap{width:40px;}
+.dl-batt-track{height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:3px;}
+.dl-batt-fill{height:3px;border-radius:2px;}
+.dl-batt-label{font-size:9px;color:rgba(255,255,255,0.35);text-align:right;}
+.nest-list{padding:8px;}
+.nest-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;margin-bottom:4px;background:rgba(255,255,255,0.02);}
+.nest-name{font-size:11px;color:#fff;}
+.nest-addr{font-size:10px;color:rgba(255,255,255,0.3);}
+.nest-count{font-size:11px;font-weight:600;color:#d85a30;}
+.chart-wrap{padding:10px 14px;}
+canvas#revenueChart{width:100%;height:80px;display:block;}
+.section-label{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;margin-bottom:8px;}
+</style>
+
+<div class="dash">
+<div class="sidebar">
+  <div class="sb-logo">M</div>
+  <div class="sb-icon active">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+  </div>
+  <div class="sb-icon">
+    <svg viewBox="0 0 24 24"><path d="M17 8C8 10 5.9 16.17 3.82 19.1A1 1 0 004.69 20H19a1 1 0 00.99-1.1C19.54 16.5 17 8 17 8z"/><path d="M10.05 4.54a1 1 0 011.9 0L13 8H9l1.05-3.46z"/></svg>
+  </div>
+  <div class="sb-icon">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+  </div>
+  <div class="sb-icon">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-icon">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+  </div>
+  <div class="sb-icon">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+  </div>
+  <div class="sb-avatar">IM</div>
+</div>
+
+<div class="content">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div>
+        <div class="page-title">Drone monitoring</div>
+        <div class="page-sub">Kampala fleet · March 27, 2026</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="live-pill"><div class="live-dot"></div>Live</div>
+      <button class="notif-btn"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></button>
+      <button class="notif-btn" style="background:#d85a30;border:none;"><svg viewBox="0 0 24 24" style="stroke:#fff;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="main-col">
+
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">DELIVERIES TODAY</div><div class="kpi-val o" id="kDeliveries">23</div><div class="kpi-change up" id="kDelta">+3 this hour</div></div>
+        <div class="kpi"><div class="kpi-label">DRONES IN FLIGHT</div><div class="kpi-val g" id="kFlight">4</div><div class="kpi-change up">of 5 active</div></div>
+        <div class="kpi"><div class="kpi-label">REVENUE (UGX)</div><div class="kpi-val b" id="kRevenue">460K</div><div class="kpi-change up">+12% vs yesterday</div></div>
+        <div class="kpi"><div class="kpi-label">AVG DELIVERY</div><div class="kpi-val" id="kAvg">7.8m</div><div class="kpi-change up">-0.4m vs target</div></div>
+      </div>
+
+      <div class="mid-row">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Live fleet map</div>
+            <div class="panel-badge pb-green">5 drones active</div>
+          </div>
+          <div class="map-wrap"><canvas id="minimap"></canvas></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Recent orders</div>
+            <div class="panel-badge pb-orange" id="orderBadge">4 active</div>
+          </div>
+          <div class="ot-head"><span>ID</span><span>Cargo</span><span>Status</span><span>Price</span></div>
+          <div id="orderTable"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Hourly revenue (UGX thousands)</div>
+          <div class="panel-badge pb-orange">today</div>
+        </div>
+        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+      </div>
+
+    </div>
+
+    <div class="right-col">
+      <div>
+        <div class="section-label">FLEET STATUS</div>
+        <div class="drone-list" id="droneList"></div>
+      </div>
+
+      <div>
+        <div class="section-label">MANGU NESTS</div>
+        <div class="nest-list" id="nestList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+const nests=[
+  {name:'Shell Nakawa',addr:'Nakawa Rd',x:0.72,y:0.28,orders:8},
+  {name:'Total Lugogo',addr:'Lugogo Bypass',x:0.55,y:0.22,orders:6},
+  {name:'Kingdom Kampala',addr:'Nile Ave',x:0.28,y:0.62,orders:5},
+  {name:'Kisementi',addr:'Kisementi Rd',x:0.38,y:0.32,orders:4},
+  {name:'Kololo Hill',addr:'Kololo',x:0.22,y:0.38,orders:3},
+  {name:'Ntinda',addr:'Ntinda Rd',x:0.78,y:0.45,orders:2},
+];
+
+const drones=[
+  {id:'MG-01',from:0,to:2,batt:82,progress:0.1,speed:0.004,color:'#d85a30'},
+  {id:'MG-02',from:1,to:3,batt:74,progress:0.45,speed:0.003,color:'#1D9E75'},
+  {id:'MG-03',from:3,to:5,batt:91,progress:0.25,speed:0.005,color:'#378ADD'},
+  {id:'MG-04',from:4,to:1,batt:61,progress:0.7,speed:0.003,color:'#EF9F27'},
+  {id:'MG-05',from:2,to:0,batt:23,progress:0,speed:0,color:'#888',charging:true},
+];
+
+const ordersData=[
+  {id:'#MG-042',cargo:'Legal document',from:'Nakawa',to:'Kingdom',status:'transit',price:'20K'},
+  {id:'#MG-041',cargo:'Medication',from:'Lugogo',to:'Kisementi',status:'transit',price:'18K'},
+  {id:'#MG-040',cargo:'Bank docs',from:'Kisementi',to:'Kololo',status:'done',price:'20K'},
+  {id:'#MG-039',cargo:'Documents',from:'Ntinda',to:'Nakawa',status:'done',price:'20K'},
+  {id:'#MG-038',cargo:'Medication',from:'Kingdom',to:'Lugogo',status:'pending',price:'18K'},
+  {id:'#MG-037',cargo:'Legal doc',from:'Kololo',to:'Ntinda',status:'cancel',price:'20K'},
+];
+
+let deliveries=23, revenue=460, frame=0;
+
+const canvas=document.getElementById('minimap');
+const ctx=canvas.getContext('2d');
+
+function resizeMap(){
+  const p=canvas.parentElement;
+  canvas.width=p.clientWidth;
+  canvas.height=p.clientHeight||200;
+}
+
+function drawMinimap(){
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#111420';
+  ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,0.03)';
+  ctx.lineWidth=1;
+  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const roads=[[0,2],[1,3],[3,4],[0,5],[2,4]];
+  roads.forEach(([a,b])=>{
+    ctx.strokeStyle='rgba(255,255,255,0.05)';
+    ctx.lineWidth=5;
+    ctx.beginPath();
+    ctx.moveTo(nests[a].x*W,nests[a].y*H);
+    ctx.lineTo(nests[b].x*W,nests[b].y*H);
+    ctx.stroke();
+  });
+  drones.forEach(d=>{
+    if(d.charging) return;
+    const n1=nests[d.from],n2=nests[d.to];
+    const x1=n1.x*W,y1=n1.y*H,x2=n2.x*W,y2=n2.y*H;
+    const cx=(x1+x2)/2,cy=(y1+y2)/2-25;
+    ctx.strokeStyle=d.color+'44';
+    ctx.lineWidth=1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.stroke();
+    ctx.setLineDash([]);
+    const t=d.progress;
+    const bx=(1-t)*(1-t)*x1+2*(1-t)*t*cx+t*t*x2;
+    const by=(1-t)*(1-t)*y1+2*(1-t)*t*cy+t*t*y2;
+    ctx.fillStyle=d.color;
+    ctx.beginPath();ctx.arc(bx,by,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(bx,by,2,0,Math.PI*2);ctx.fill();
+  });
+  nests.forEach(n=>{
+    const x=n.x*W,y=n.y*H;
+    ctx.strokeStyle='rgba(216,90,48,0.4)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle='rgba(216,90,48,0.12)';
+    ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#d85a30';
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.font='bold 8px Segoe UI';
+    ctx.textAlign='center';
+    ctx.fillText(n.name.split(' ')[0],x,y+20);
+  });
+}
+
+function updateDrones(){
+  drones.forEach(d=>{
+    if(d.charging) return;
+    d.progress+=d.speed;
+    if(d.progress>=1){
+      d.progress=0;
+      d.from=d.to;
+      d.to=Math.floor(Math.random()*nests.length);
+      if(d.to===d.from) d.to=(d.from+1)%nests.length;
+      deliveries++;
+      revenue+=20;
+    }
+    d.batt=Math.max(5,d.batt-0.008);
+  });
+}
+
+function updateUI(){
+  document.getElementById('kDeliveries').textContent=deliveries;
+  document.getElementById('kRevenue').textContent=Math.round(revenue)+'K';
+  const active=drones.filter(d=>!d.charging).length;
+  document.getElementById('kFlight').textContent=active;
+
+  document.getElementById('droneList').innerHTML=drones.map(d=>{
+    const batt=Math.round(d.batt);
+    const bc=batt>50?'#1D9E75':batt>25?'#EF9F27':'#E24B4A';
+    const status=d.charging?'Charging':batt<30?'Low battery':'In flight';
+    const dotClass=d.charging?'di-ch':batt<30?'di-ch':'di-on';
+    const from=nests[d.from]?.name.split(' ')[0]||'—';
+    const to=nests[d.to]?.name.split(' ')[0]||'—';
+    return `<div class="dl-row">
+      <div class="dl-indicator ${dotClass}"></div>
+      <div class="dl-id">${d.id}</div>
+      <div class="dl-info">
+        <div style="font-size:11px;color:#fff;">${status}</div>
+        <div class="dl-route">${d.charging?'Charging at nest':`${from} → ${to}`}</div>
+        <div class="dl-batt-track"><div class="dl-batt-fill" style="width:${batt}%;background:${bc};"></div></div>
+      </div>
+      <div class="dl-batt-wrap"><div class="dl-batt-label">${batt}%</div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('nestList').innerHTML=nests.slice(0,5).map(n=>`
+    <div class="nest-item">
+      <div><div class="nest-name">${n.name}</div><div class="nest-addr">${n.addr}</div></div>
+      <div class="nest-count">${n.orders} orders</div>
+    </div>`).join('');
+
+  document.getElementById('orderTable').innerHTML=ordersData.map(o=>{
+    const sc=o.status==='transit'?'st-transit':o.status==='done'?'st-done':o.status==='pending'?'st-pending':'st-cancel';
+    const sl=o.status==='transit'?'In transit':o.status==='done'?'Delivered':o.status==='pending'?'Pending':'Cancelled';
+    return `<div class="ot-row">
+      <div><div class="ot-id">${o.id}</div></div>
+      <div><div class="ot-cargo">${o.cargo}</div><div class="ot-route">${o.from} → ${o.to}</div></div>
+      <div><span class="st-badge ${sc}">${sl}</span></div>
+      <div class="price-col">${o.price}K</div>
+    </div>`;
+  }).join('');
+}
+
+function drawRevenueChart(){
+  const c=document.getElementById('revenueChart');
+  const cx2=c.getContext('2d');
+  const W=c.parentElement.clientWidth-28;
+  c.width=W; c.height=80;
+  const data=[18,24,31,28,42,38,55,48,60,58,72,65,80,76,90,85,95,88,100,94,110,105,115,112];
+  const max=Math.max(...data);
+  const step=W/data.length;
+  cx2.strokeStyle='#d85a30';
+  cx2.lineWidth=1.5;
+  cx2.beginPath();
+  data.forEach((v,i)=>{
+    const x=i*step+step/2;
+    const y=80-(v/max)*70;
+    i===0?cx2.moveTo(x,y):cx2.lineTo(x,y);
+  });
+  cx2.stroke();
+  data.forEach((v,i)=>{
+    cx2.fillStyle='rgba(216,90,48,0.15)';
+    const x=i*step+step/2;
+    const y=80-(v/max)*70;
+    cx2.fillRect(x-step/2+1,y,step-2,80-y);
+  });
+  cx2.fillStyle='rgba(255,255,255,0.2)';
+  cx2.font='8px Segoe UI';
+  cx2.textAlign='center';
+  ['6am','9am','12pm','3pm','6pm','9pm'].forEach((l,i)=>{
+    cx2.fillText(l,i*(W/5),78);
+  });
+}
+
+function loop(){
+  frame++;
+  updateDrones();
+  drawMinimap();
+  if(frame%40===0) updateUI();
+  requestAnimationFrame(loop);
+}
+
+resizeMap();
+updateUI();
+drawRevenueChart();
+loop();
+window.addEventListener('resize',()=>{resizeMap();drawRevenueChart();});
+})();
+</script>
