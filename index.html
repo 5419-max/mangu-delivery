@@ -1,300 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mangu Delivery</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #0a0e1a; color: white; min-height: 100vh; }
-    
-    /* NAV */
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #f97316; letter-spacing: -0.5px; }
-    .logo span { color: white; }
-    .nav-links { display: flex; gap: 24px; font-size: 0.9rem; color: rgba(255,255,255,0.6); }
-    .nav-cta { background: #f97316; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; }
 
-    /* HERO */
-    .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 60px 32px; max-width: 1100px; margin: 0 auto; align-items: center; }
-    .hero-text h1 { font-size: 3rem; font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
-    .hero-text h1 span { color: #f97316; }
-    .hero-text p { color: rgba(255,255,255,0.6); font-size: 1.1rem; margin-bottom: 32px; line-height: 1.6; }
-    .hero-btns { display: flex; gap: 12px; }
-    .btn-primary { background: #f97316; color: white; border: none; padding: 14px 28px; border-radius: 30px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .btn-primary:hover { background: #ea6c0a; transform: translateY(-2px); }
-    .btn-secondary { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.3); padding: 14px 28px; border-radius: 30px; font-size: 1rem; font-weight: 600; cursor: pointer; }
 
-    /* STATS */
-    .stats { display: flex; gap: 32px; margin-top: 40px; }
-    .stat { }
-    .stat-num { font-size: 2rem; font-weight: 900; color: #f97316; }
-    .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+.pg{background:#0d0f14;color:#fff;font-family:'Segoe UI',sans-serif;min-height:600px;display:flex;flex-direction:column;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.logo{font-size:1.3rem;font-weight:800;color:#d85a30;letter-spacing:-0.5px;}
+.logo span{color:#fff;}
+.nav-links{display:flex;gap:24px;font-size:13px;color:rgba(255,255,255,0.4);}
+.nav-links a{color:rgba(255,255,255,0.4);text-decoration:none;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{background:#d85a30;color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:60px 32px 40px;max-width:1100px;margin:0 auto;width:100%;align-items:center;flex:1;}
+.hero-left h1{font-size:2.8rem;font-weight:900;line-height:1.1;margin-bottom:16px;}
+.hero-left h1 em{color:#d85a30;font-style:normal;}
+.hero-left p{color:rgba(255,255,255,0.5);font-size:1rem;margin-bottom:28px;line-height:1.7;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-p{background:#d85a30;color:#fff;border:none;padding:13px 28px;border-radius:30px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
+.btn-s{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.2);padding:13px 28px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;}
+.btn-s:hover{border-color:rgba(255,255,255,0.5);}
+.stats-row{display:flex;gap:32px;margin-top:40px;}
+.stat-num{font-size:1.8rem;font-weight:900;color:#d85a30;}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.hero-right{background:#161921;border-radius:20px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;}
+.demo-header{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;}
+.demo-label{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;}
+.live-pill{display:flex;align-items:center;gap:5px;font-size:10px;color:#1D9E75;}
+.ld{width:6px;height:6px;border-radius:50%;background:#1D9E75;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.mini-map{background:#111420;height:200px;position:relative;overflow:hidden;}
+canvas#lc{display:block;width:100%;height:100%;}
+.demo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.ds{padding:12px 16px;border-right:1px solid rgba(255,255,255,0.07);}
+.ds:last-child{border:none;}
+.ds-num{font-size:18px;font-weight:700;color:#fff;}
+.ds-num.o{color:#d85a30;}
+.ds-num.g{color:#1D9E75;}
+.ds-lbl{font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;}
+.demo-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:8px;}
+.df-btn{flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;text-align:center;text-decoration:none;display:block;}
+.df-btn-p{background:#d85a30;color:#fff;}
+.df-btn-o{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);}
+.features{padding:40px 32px;max-width:1100px;margin:0 auto;width:100%;}
+.feat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px;}
+.feat-card{background:#161921;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;}
+.feat-icon{width:36px;height:36px;border-radius:8px;background:rgba(216,90,48,0.12);margin-bottom:12px;}
+.feat-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;}
+.feat-desc{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;}
+footer{padding:24px 32px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,0.25);}
+footer span{color:#d85a30;}
+.footer-links{display:flex;gap:16px;}
+.footer-links a{color:rgba(255,255,255,0.25);text-decoration:none;font-size:12px;}
+</style>
 
-    /* DEMO CARD */
-    .demo-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; backdrop-filter: blur(20px); }
-    .demo-title { font-size: 0.8rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-    
-    /* MAP */
-    .map-area { background: #111827; border-radius: 16px; height: 220px; position: relative; overflow: hidden; margin-bottom: 16px; }
-    .map-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 30px 30px; }
-    .map-road-h { position: absolute; background: rgba(255,255,255,0.06); height: 8px; }
-    .map-road-v { position: absolute; background: rgba(255,255,255,0.06); width: 8px; }
-    
-    .pin { position: absolute; display: flex; flex-direction: column; align-items: center; }
-    .pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; }
-    .pin-label { font-size: 0.65rem; color: rgba(255,255,255,0.7); margin-top: 4px; white-space: nowrap; }
-    .pin-merchant .pin-dot { background: #f97316; }
-    .pin-customer .pin-dot { background: #22c55e; }
-
-    /* DRONE */
-    #drone { position: absolute; font-size: 1.4rem; transition: all 0.1s linear; filter: drop-shadow(0 0 8px #f97316); }
-    .trail { position: absolute; height: 2px; background: linear-gradient(90deg, transparent, #f97316); border-radius: 2px; transform-origin: left center; opacity: 0.6; }
-
-    /* ORDER PANEL */
-    .order-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.9rem; }
-    .order-row:last-child { border: none; }
-    .order-label { color: rgba(255,255,255,0.5); }
-    .order-value { font-weight: 600; }
-    .status-badge { background: rgba(249,115,22,0.2); color: #f97316; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-    .status-badge.delivered { background: rgba(34,197,94,0.2); color: #22c55e; }
-
-    /* LAUNCH BTN */
-    #launchBtn { width: 100%; background: linear-gradient(135deg, #f97316, #ef4444); border: none; color: white; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.2s; letter-spacing: 0.5px; }
-    #launchBtn:hover { opacity: 0.9; transform: translateY(-1px); }
-    #launchBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    /* FEATURES */
-    .features { padding: 60px 32px; max-width: 1100px; margin: 0 auto; }
-    .features h2 { text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
-    .features p.sub { text-align: center; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
-    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .feature-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; transition: all 0.2s; }
-    .feature-card:hover { border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.05); }
-    .feature-icon { font-size: 2rem; margin-bottom: 12px; }
-    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .feature-card p { font-size: 0.85rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
-
-    /* FOOTER */
-    footer { text-align: center; padding: 32px; color: rgba(255,255,255,0.3); font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.07); }
-    footer span { color: #f97316; }
-  </style>
-</head>
-<body>
-
+<div class="pg">
 <nav>
   <div class="logo">Mangu <span>Delivery</span></div>
   <div class="nav-links">
-    <span>How it works</span>
-    <span>Merchants</span>
-    <span>About</span>
+    <a href="#">How it works</a>
+    <a href="#">Mangu Nests</a>
+    <a href="#">Merchants</a>
+    <a href="#">About</a>
   </div>
-  <button class="nav-cta">Download App</button>
+  <button class="nav-cta">Request access</button>
 </nav>
 
-<section class="hero">
-  <div class="hero-text">
-    <h1>Delivery at the<br/>speed of <span>Mangu.</span></h1>
-    <p>Uganda's first AI-powered drone delivery network. From your favourite restaurant to your door — in minutes, not hours.</p>
+<div class="hero">
+  <div class="hero-left">
+    <h1>Delivery at the<br/>speed of <em>Mangu.</em></h1>
+    <p>Uganda's first AI-powered drone logistics network. From merchant to Mangu Nest in 8 minutes — no traffic, no delays, no excuses.</p>
     <div class="hero-btns">
-      <button class="btn-primary">Order Now</button>
-      <button class="btn-secondary">Watch Demo ▶</button>
+      <a class="btn-p" href="demo.html">Watch demo</a>
+      <a class="btn-s" href="customer-app.html">Customer experience</a>
     </div>
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-num">8 min</div>
-        <div class="stat-label">Avg delivery time</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">5,000 UGX</div>
-        <div class="stat-label">Flat delivery fee</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">24/7</div>
-        <div class="stat-label">Always on</div>
-      </div>
+    <div class="stats-row">
+      <div><div class="stat-num" id="s1">8 min</div><div class="stat-lbl">avg delivery time</div></div>
+      <div><div class="stat-num" id="s2">20K</div><div class="stat-lbl">UGX per delivery</div></div>
+      <div><div class="stat-num" id="s3">24/7</div><div class="stat-lbl">always on</div></div>
     </div>
   </div>
 
-  <div class="demo-card">
-    <div class="demo-title">🚁 Live Drone Tracking — Kampala</div>
-    <div class="map-area" id="mapArea">
-      <div class="map-grid"></div>
-      <!-- Roads -->
-      <div class="map-road-h" style="top:50%;left:0;right:0;"></div>
-      <div class="map-road-h" style="top:30%;left:0;right:0;"></div>
-      <div class="map-road-h" style="top:70%;left:0;right:0;"></div>
-      <div class="map-road-v" style="left:30%;top:0;bottom:0;"></div>
-      <div class="map-road-v" style="left:60%;top:0;bottom:0;"></div>
-      <!-- Merchant Pin -->
-      <div class="pin pin-merchant" style="left:22%;top:28%;" id="merchantPin">
-        <div class="pin-dot"></div>
-        <div class="pin-label">☕ Café Javas Lugogo</div>
-      </div>
-      <!-- Customer Pin -->
-      <div class="pin pin-customer" style="left:68%;top:62%;" id="customerPin">
-        <div class="pin-dot"></div>
-        <div class="pin-label">🏢 Kingdom Kampala</div>
-      </div>
-      <!-- Drone -->
-      <div id="drone" style="left:22%;top:25%;">🚁</div>
-      <!-- Trail container -->
-      <div id="trailContainer"></div>
+  <div class="hero-right">
+    <div class="demo-header">
+      <div class="demo-label">LIVE FLEET PREVIEW · KAMPALA</div>
+      <div class="live-pill"><div class="ld"></div>Live</div>
     </div>
-
-    <div class="order-row">
-      <span class="order-label">Order</span>
-      <span class="order-value">Chicken Sandwich + Latte</span>
+    <div class="mini-map"><canvas id="lc"></canvas></div>
+    <div class="demo-stats">
+      <div class="ds"><div class="ds-num o" id="dc">23</div><div class="ds-lbl">deliveries today</div></div>
+      <div class="ds"><div class="ds-num g" id="df">4</div><div class="ds-lbl">drones in flight</div></div>
+      <div class="ds"><div class="ds-num" id="dr">460K</div><div class="ds-lbl">UGX revenue</div></div>
     </div>
-    <div class="order-row">
-      <span class="order-label">From</span>
-      <span class="order-value">Café Javas, Lugogo</span>
-    </div>
-    <div class="order-row">
-      <span class="order-label">To</span>
-      <span class="order-value">Kingdom Kampala</span>
-    </div>
-    <div class="order-row">
-      <span class="order-label">ETA</span>
-      <span class="order-value" id="etaDisplay">8 mins</span>
-    </div>
-    <div class="order-row">
-      <span class="order-label">Status</span>
-      <span class="status-badge" id="statusBadge">Ready</span>
-    </div>
-    <button id="launchBtn" onclick="launchDrone()">🚁 Launch Drone</button>
-  </div>
-</section>
-
-<section class="features">
-  <h2>Why choose Mangu?</h2>
-  <p class="sub">Built for Kampala. Built for speed.</p>
-  <div class="feature-grid">
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>Lightning Fast</h3>
-      <p>Drones fly direct routes, skipping Kampala traffic entirely. Most deliveries under 10 minutes.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📍</div>
-      <h3>Live Tracking</h3>
-      <p>Watch your drone in real-time on the map. Know exactly when it's landing.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">💰</div>
-      <h3>Affordable</h3>
-      <p>Flat 5,000 UGX delivery fee. No surge pricing, no hidden costs. Ever.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🤖</div>
-      <h3>AI Powered</h3>
-      <p>Every drone is guided by smart AI that optimises routes and avoids obstacles automatically.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌍</div>
-      <h3>Made for Uganda</h3>
-      <p>Accepts Mobile Money. Works everywhere in Kampala. Built with local merchants.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔒</div>
-      <h3>Safe & Secure</h3>
-      <p>Insured deliveries, tamper-proof packaging, and precision landing technology.</p>
+    <div class="demo-footer">
+      <a class="df-btn df-btn-p" href="demo.html">Watch full demo</a>
+      <a class="df-btn df-btn-o" href="admin-dashboard.html">Admin view</a>
     </div>
   </div>
-</section>
+</div>
+
+<div class="features">
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon"></div><div class="feat-title">Mangu Nests</div><div class="feat-desc">Secure hub-and-spoke landing stations at Shell and Total stations across Kampala. 99.9% precision landing.</div></div>
+    <div class="feat-card"><div class="feat-icon"></div><div class="feat-title">High-value first</div><div class="feat-desc">Legal documents, pharmaceuticals, finance. Start where margins are highest, scale to everything.</div></div>
+    <div class="feat-card"><div class="feat-icon"></div><div class="feat-title">AI-guided fleet</div><div class="feat-desc">Every drone is autonomous, encrypted, and monitored in real time. Security-first architecture.</div></div>
+  </div>
+</div>
 
 <footer>
-  <p>© 2025 <span>Mangu Delivery</span> — Kampala, Uganda. Moving fast, always.</p>
+  <div>© 2026 <span>Mangu Delivery</span> — Kampala, Uganda</div>
+  <div class="footer-links">
+    <a href="demo.html">Live demo</a>
+    <a href="customer-app.html">Customer app</a>
+    <a href="admin-dashboard.html">Admin dashboard</a>
+  </div>
 </footer>
+</div>
 
 <script>
-  let animating = false;
-
-  function launchDrone() {
-    if (animating) return;
-    animating = true;
-
-    const btn = document.getElementById('launchBtn');
-    const drone = document.getElementById('drone');
-    const status = document.getElementById('statusBadge');
-    const eta = document.getElementById('etaDisplay');
-    const mapArea = document.getElementById('mapArea');
-    const trailContainer = document.getElementById('trailContainer');
-
-    btn.disabled = true;
-    status.textContent = 'In Flight ✈️';
-    status.className = 'status-badge';
-    trailContainer.innerHTML = '';
-
-    const mapW = mapArea.offsetWidth;
-    const mapH = mapArea.offsetHeight;
-
-    // Start: merchant pin ~22%, 28%
-    // End: customer pin ~68%, 62%
-    const startX = mapW * 0.22;
-    const startY = mapH * 0.25;
-    const endX = mapW * 0.68;
-    const endY = mapH * 0.60;
-
-    const totalSteps = 80;
-    let step = 0;
-    let prevX = startX, prevY = startY;
-
-    // Countdown
-    let secondsLeft = 8;
-    const countInterval = setInterval(() => {
-      secondsLeft--;
-      if (secondsLeft > 0) eta.textContent = secondsLeft + ' mins';
-      else clearInterval(countInterval);
-    }, 1000);
-
-    const interval = setInterval(() => {
-      if (step >= totalSteps) {
-        clearInterval(interval);
-        status.textContent = 'Delivered ✅';
-        status.className = 'status-badge delivered';
-        eta.textContent = 'Arrived!';
-        btn.disabled = false;
-        btn.textContent = '🔄 Fly Again';
-        animating = false;
-        // Bounce drone
-        drone.style.animation = 'none';
-        drone.style.transform = 'scale(1.4)';
-        setTimeout(() => drone.style.transform = 'scale(1)', 300);
-        return;
-      }
-
-      const t = step / totalSteps;
-      // Ease in-out
-      const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      // Slight arc
-      const arcY = Math.sin(Math.PI * t) * -30;
-
-      const x = startX + (endX - startX) * ease;
-      const y = startY + (endY - startY) * ease + arcY;
-
-      drone.style.left = x + 'px';
-      drone.style.top = y + 'px';
-
-      // Draw trail segment
-      if (step % 3 === 0) {
-        const trail = document.createElement('div');
-        trail.className = 'trail';
-        const dx = x - prevX;
-        const dy = y - prevY;
-        const len = Math.sqrt(dx*dx + dy*dy);
-        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-        trail.style.left = prevX + 'px';
-        trail.style.top = prevY + 'px';
-        trail.style.width = len + 'px';
-        trail.style.transform = `rotate(${angle}deg)`;
-        trailContainer.appendChild(trail);
-        prevX = x; prevY = y;
-      }
-
-      step++;
-    }, 100);
+(function(){
+const c=document.getElementById('lc');
+const ctx=c.getContext('2d');
+const nests=[
+  {x:0.72,y:0.28,name:'Nakawa'},{x:0.55,y:0.22,name:'Lugogo'},
+  {x:0.28,y:0.62,name:'Kingdom'},{x:0.38,y:0.32,name:'Kisementi'},
+  {x:0.22,y:0.38,name:'Kololo'},{x:0.78,y:0.45,name:'Ntinda'},
+];
+const drones=[
+  {from:0,to:2,p:0.1,spd:0.004,col:'#d85a30'},
+  {from:1,to:3,p:0.45,spd:0.003,col:'#1D9E75'},
+  {from:3,to:5,p:0.25,spd:0.005,col:'#378ADD'},
+  {from:4,to:1,p:0.7,spd:0.003,col:'#EF9F27'},
+];
+let del=23,rev=460,frame=0;
+function resize(){const p=c.parentElement;c.width=p.clientWidth;c.height=p.clientHeight||200;}
+function draw(){
+  const W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#111420';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=35){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  drones.forEach(d=>{
+    const n1=nests[d.from],n2=nests[d.to];
+    const x1=n1.x*W,y1=n1.y*H,x2=n2.x*W,y2=n2.y*H;
+    const cx=(x1+x2)/2,cy=(y1+y2)/2-25;
+    ctx.strokeStyle=d.col+'33';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.stroke();
+    ctx.setLineDash([]);
+    const t=d.p;
+    const bx=(1-t)*(1-t)*x1+2*(1-t)*t*cx+t*t*x2;
+    const by=(1-t)*(1-t)*y1+2*(1-t)*t*cy+t*t*y2;
+    ctx.fillStyle=d.col;ctx.beginPath();ctx.arc(bx,by,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(bx,by,2,0,Math.PI*2);ctx.fill();
+    d.p+=d.spd;
+    if(d.p>=1){d.p=0;d.from=d.to;d.to=Math.floor(Math.random()*nests.length);if(d.to===d.from)d.to=(d.from+1)%nests.length;del++;rev+=20;}
+  });
+  nests.forEach(n=>{
+    const x=n.x*W,y=n.y*H;
+    ctx.strokeStyle='rgba(216,90,48,0.4)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle='rgba(216,90,48,0.1)';ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#d85a30';ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.5)';ctx.font='bold 8px Segoe UI';ctx.textAlign='center';
+    ctx.fillText(n.name,x,y+20);
+  });
+  frame++;
+  if(frame%40===0){
+    document.getElementById('dc').textContent=del;
+    document.getElementById('dr').textContent=Math.round(rev)+'K';
   }
+  requestAnimationFrame(draw);
+}
+resize();draw();
+window.addEventListener('resize',resize);
+})();
 </script>
-</body>
-</html>
